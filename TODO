@@ -1,0 +1,4 @@
+- Add bugreport email and hosting site URL to the usage and the README
+- test it on FreeBSD, and different linuxes
+- Add IPV6 support
+

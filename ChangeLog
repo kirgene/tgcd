@@ -1,0 +1,16 @@
+2014-07-06: Fixed a bug which caused incomplete data transfer in some HTTP connections (1.0.2)
+2013-11-06: Added an argument so that an external filter could be called upon accepting connections to permit or reject the connection (1.0.1)
+2008-12-18: Fixed a bug where if both CC and LL used "fork" method the child processes could stay on even after the connection was dropped (0.98)
+
+2008-12-17: Fixed a bug where CC node if used with "fork" method could create zombie processes
+
+2008-11-29: Added some fault tolerancy and security fixes, such as we drop 
+	    an incomming connection from CC if it's not coming from the 
+	    same IP as control connection or if no client is waiting (v0.96)
+
+2008-11-24: Added multiple concurrent connection support (v0.95)
+
+2008-11-17: Added support for host_access (aka libwrap)
+
+2008-11-17: Initial code release (v0.90)
+

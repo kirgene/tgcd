@@ -1,0 +1,100 @@
+TGC is the TCP Gender Changer.
+
+Copyright (C) 2008-2014 Faraz V (faraz@fzv.ca)
+
+This program is free software; you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation; either version 2, or (at your option)
+any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+Disclaimer:
+This program is provided with no warranty of any kind, either expressed or
+implied.  It is the responsibility of the user (you) to fully research and
+comprehend the usage of this program.  As with any tool, it can be misused,
+either intentionally or unintentionally.
+THE AUTHOR(S) IS(ARE) NOT RESPONSIBLE FOR ANYTHING YOU DO WITH THIS PROGRAM
+or anything that happens because of your use (or misuse) of this program.
+
+
+THIS SOFTWARE IS PROVIDED BY THE AUTHOR AND CONTRIBUTORS ``AS IS'' AND
+ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+ARE DISCLAIMED.  IN NO EVENT SHALL THE AUTHOR OR CONTRIBUTORS BE LIABLE
+FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
+DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS
+OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
+HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT
+LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY
+OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
+SUCH DAMAGE.
+
+
+
+You should have received a copy of the GNU General Public License
+along with this program; if not, write to the Free Software
+Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+
+
+* Technical details:
+
+	tgcd is a simple Unix network utility to extend the accessibility of TCP/IP based network services
+	beyond firewalls.
+	This can also be used by network analysts and security experts for penetration testing and analyze 
+	the security of their network.
+
+	This program has 3 different modes:
+
+	- CC (ConnectConnect)
+	- LL (ListenListen)
+	- PF (PortForwarder)
+
+	CC and LL nodes are used together to provide access to a service inside a Local 
+	Area Network to the external network. PF node is, however, only a simple
+	port forwarder.
+
+	CC node resides in the LAN and connect to the LL (on the external network), and
+	once a client connects to LL, then CC gets notified and establishes a connection
+	to the server on the LAN.
+
+	This program complies with host_access (aka libwrap), to control its accessibility.
+
+	The idea is nothing new and there has been many implementation of it available already, 
+	namely:
+
+ 	- revinetd (written by Steven M. Gill and Alexandre Carmel-Veilleux)
+		available at: http://revinetd.sourceforge.net
+
+	- An implementation using "socat" (an excellent network utility):
+		http://www.dest-unreach.org/socat/doc/socat-gender.txt
+
+	- FireWall Tunnel, available at: http://sourceforge.net/projects/firewall-tunnel/
+
+	- An artile explaining the idea: 
+		http://www.bandwidthco.com/whitepapers/netforensics/tcpip/TCP-IP%20Gender%20Changer.pdf
+
+	There might be other implementations using netcat or other network utilities.
+
+
+	For more information and examples on how to use this utility please refer to its
+	man page (tgcd(1)).
+	
+	This software is provided only as a tool for network security analysts and
+	penetration testers. We do not take any responsibility for any damage that
+	can be done by using or misusing this software. Use it responsibilly and 
+	at your own risk (read the disclaimer above)
+
+
+	NOTE:  This software has only been tested on the following platforms:
+
+	Linux 2.2.x (x86), 2.4.x (x86), 2.6.x (x86, ARM9, AVR32), Cygwin (1.5.x), NetBSD 2.1.0
+
+	Please feel free to send us your comments or any patches you may have to get tgc 
+	working on other platforms.
+
+
+

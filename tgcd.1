@@ -1,0 +1,186 @@
+.TH tgcd 1 LOCAL
+.SH NAME
+tgcd \- TCP/IP Gender Changer Daemon utility
+.SH SYNOPSIS
+.B tgcd 
+.I -C -s<host:port> -c<host:port> [-i<n>] [-k<n>] [<common options>]
+.br
+.B tgcd 
+.I -L -p<port> -q<port> [-k<n>] [<common options>]
+.br
+.B tgcd 
+.I -F -p<port> -s<host:port> [<common options>]
+.SH DESCRIPTION
+.B tgcd 
+is a simple Unix network utility to extend the accessibility of TCP/IP based network services beyond firewalls. This can also be 
+used by network analysts and security experts for penetration testing and analyze the security of their network.
+It has three different modes:
+
+- ConnectConnect (or CC, specified by option -C) 
+.br
+- ListenListen (or LL, specified by option -L)
+.br
+- Port Forwarder (or PF, specified by option -F) 
+
+The ConnectConnect and ListenListen instances of 
+.B tgcd
+are used jointly together, while the Port Forwarder mode acts standalone.
+.P
+The ConnectConnect instance resides somewhere on the network (inside the LAN) where it can access the desired server, while
+the ListenListen will be where the external client can access it (outside the LAN).
+The ConnectConnect instance, when started, tries to establish a control connection to ListenListen instance 
+(if failed it will retry every n seconds specified by -i ).
+.P
+The ListenListen instance upon receiving a connection from client, will send a request to ConnectConnect (over the already established
+control connection) to establish a connection to server as well as another connection to ListenListen for data transferring.
+.P
+In the Port Forwarder mode, 
+.B tgcd 
+will pump data from one port to another providing a basic port forwarding functionality.
+
+For all three modes, one can choose (using -m option) between two different ways of handling multiple connections.
+By choosing the Select method, the program will use less system memory in expense of slower handling of multiple connections, and on the
+other side by choosing Fork method 
+.B tgcd
+will handle the multiple connections faster in expense of system memory.
+
+.B tgcd 
+links with libwrap (if available at build time) to provide a simple access control mechanism that's provided by hosts_access(5).
+
+Aside from libwrap support, since version 1.0.2 an executable can also be passed to 
+.B tgcd
+(using -f or --filter argument) to perform whether or not accept a connection. The script takes the incoming
+IP address as the parameter, and its exit code indicates whether or now 
+.B tgcd
+should accept the connection or not. Exit code 0 means to accept, non-zero means to reject the incoming connection.
+The filter feature only takes effect on LL and LC nodes.
+
+
+.SH OPTIONS
+.TP Options for ConnectConnect mode:
+.TP 30 
+.I \-C, --ccnode               
+Become a CC (ConnectConnect) node.
+.TP 30
+.I \-s, --server <host:port>   
+The host and port of the actual server
+.TP 30
+.I \-c, --llhost <host:port> 
+The host and port of the ListenListen node.
+.TP 30
+.I \-i, --interval <seconds>
+Time interval to periodically report to LL (default: 40s).
+.TP 30
+.I \-k, --key <number>
+poorman's encryption (0-255, default: 0, means no encryption)
+
+.TP
+Options for ListenListen mode:
+.TP 30
+.I \-L, --llnode
+Become a LL (ListenListen) node.
+.TP 30
+.I \-q, --llport number
+The port to listen on for incoming connection from a CC node
+.TP 30
+.I \-p, --port number
+The port to listen of for incoming actual client connection
+.TP 30
+.I \-k, --key number
+poorman's encryption (0-255, default: 0, means no encryption)
+.TP
+Port forwarder options:
+.TP 30
+.I \-F, --lcnode
+Become a ListenConnect node, i.e. just a simple port forwarder
+.TP 30
+.I \-p, --port number
+The port to listen of for incoming actual client connection
+.TP 30
+.I \-s, --server host:port
+The host and port of the destination server 
+.TP
+Common options:
+.TP 30
+.I \-m, --method {f|s}     
+f: Fork  s: Select (default: s)
+.TP 30
+.I \-f, --filter filter        
+Optional argument to run filter on new connections, IP passed as argument
+.TP 30
+.I \-l, --log file
+Write logs to file. (default:'/dev/null')
+.TP 30
+.I \-g, --level number
+Log level detail (default:0).
+.TP 30
+.I \-n, --nodaemon 
+Do not become daemon
+.TP 30
+.I \-h, --help
+Display this.
+.TP 30
+.I \-v, --version
+Display version number.
+
+.SH EXAMPLES
+
+Lets say you'd like to access a localy running WEB server on your work PC from home, this is how to do it:
+
+To run tgcd in CC mode and provide access to the local WEB server :
+
+.br
+tgcd -C -s localhost:80 -c my_home_computer:1234 
+
+.br
+To run tgcd in LL mode on my_home_computer host to provide access to the above service:
+
+.br
+tgcd -L -p 8000 -q 1234
+
+.br
+This will make the WEB server running on the work PC accessible on port 8000 of my_home_computer.
+
+.SH SEE ALSO
+hosts_access(5)
+.SH AVAILABILITY
+.B tgcd
+is tested on Linux 2.2.x (x86), 2.4.x (x86), 2.6.x (x86, ARM9, AVR32), Cygwin (1.5.x), and NetBSD 2.1.0 
+.br
+Please feel free to send us your patches to get tgc working on other platforms.
+
+.SH COPYRIGHT AND LEGAL ISSUES
+This program is free software; you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation; either version 2, or (at your option)
+any later version.
+.P
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+.P
+Disclaimer:
+
+This program is provided with no warranty of any kind, either expressed or
+implied.  It is the responsibility of the user (you) to fully research and
+comprehend the usage of this program.  As with any tool, it can be misused,
+either intentionally or unintentionally.
+THE AUTHOR(S) IS(ARE) NOT RESPONSIBLE FOR ANYTHING YOU DO WITH THIS PROGRAM
+or anything that happens because of your use (or misuse) of this program.
+.P
+THIS SOFTWARE IS PROVIDED BY THE AUTHOR AND CONTRIBUTORS ``AS IS'' AND
+ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+ARE DISCLAIMED.  IN NO EVENT SHALL THE AUTHOR OR CONTRIBUTORS BE LIABLE
+FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
+DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS
+OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
+HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT
+LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY 
+OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
+SUCH DAMAGE.
+.SH AUTHOR
+.B tgcd
+is written by Faraz.V (faraz@fzv.ca)
+
