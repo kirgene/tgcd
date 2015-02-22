@@ -410,7 +410,7 @@ int tgc_ll(TGC *tgc)
 	struct in_addr	cc_addr = { 0 } ;
 	char		ip[16];
 	int		close_control = 0;
-
+	struct timeval	tv;
 
 	if (!tgc)
 		return E_TGC_IE;
@@ -435,9 +435,18 @@ int tgc_ll(TGC *tgc)
 	tgc->node.ll.control_sd = -1;
 
 	while(1) {
+		tv.tv_sec = tgc->node.ll.timeout;
+		tv.tv_usec = 0;
 		reads = rfds;
-		if ( select(FD_SETSIZE, &reads, NULL, NULL, NULL) < 0 ) 
+		if ( (rc = select(FD_SETSIZE, &reads, NULL, NULL, &tv)) < 0 )
 			continue;
+		if (rc == 0 && tgc->node.ll.control_sd >= 0) {
+			PRINT_LOG(1, "time out, closing control connection");
+			FD_CLR(tgc->node.ll.control_sd, &rfds);
+			close_connection(&(tgc->node.ll.control_sd));
+			close_control = 0;
+			continue;
+		}
 
 		if (FD_ISSET(tgc->sdx_accept, &reads)) { // incoming client connection
 			sdx = accept_connection(tgc->sdx_accept, (struct sockaddr_in *)&addr, 

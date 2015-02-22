@@ -89,6 +89,7 @@ typedef struct {
 typedef struct {
 	unsigned short	port;
 	unsigned short  ll_port;
+	unsigned short	timeout;
 	unsigned char	protocol;
 	int		control_sd;	// control connection
 	socket_queue	*socketq;	//external (C/S-CC/LL)

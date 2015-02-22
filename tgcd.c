@@ -83,10 +83,12 @@ void print_usage(int exit_code)
 	printf(" -k, --key number	    Poorman's encryption (0-255, default: 0, means no encryption)\n");
 	
 	printf("\n");
-	printf(" ListenListen mode: %s -L -p port  -q port  [-k n ] [ common options ...]\n", PACKAGE);
+	printf(" ListenListen mode: %s -L -p port  -q port [-t n] [-k n ] [ common options ...]\n", PACKAGE);
 	printf(" -L, --llnode		    Become a LL (ListenListen) node.\n");
 	printf(" -q, --llport number 	    The port to listen on for incomming connection from a CC node\n");
 	printf(" -p, --port number 	    The port to listen on for incomming actual client connection\n");
+	printf(" -t, --timeout seconds      Inactivity timeout during connection with CC node (default: %ds).\n",
+	       (int)(TGC_TIMEOUT * 1.5));
 	printf(" -k, --key number 	    Poorman's encryption (0-255, default: 0, means no encryption)\n");
 	
 	printf("\n");
@@ -159,7 +161,7 @@ int main(int argc,char *argv[])
 	struct stat filter_stat;
 	
 	/* short options */
-	const char *short_options = "Cs:c:i:Lq:p:Fk:m:f:l:g:nhv";
+	const char *short_options = "Cs:c:i:Lq:p:t:Fk:m:f:l:g:nhv";
 	
 	/* long options */
 	const struct option long_options[] = {
@@ -171,6 +173,7 @@ int main(int argc,char *argv[])
 		{"llnode",	0, NULL, 'L'},
 		{"llport",	1, NULL, 'q'},
 		{"port",	1, NULL, 'p'},
+		{"timeout",	1, NULL, 't'},
 
 		{"lcnode",	0, NULL, 'F'},
 
@@ -264,6 +267,14 @@ int main(int argc,char *argv[])
 					exit(2);
 				}
 				tgc.node.cc.interval = ntemp;
+				break;
+			case 't':
+				ntemp = atoi(optarg);
+				if (!strnum(optarg) || ntemp<=0 || ntemp>65535) {
+					fprintf(stderr, "Invalid interval number '%s'\n", optarg);
+					exit(2);
+				}
+				tgc.node.ll.timeout = ntemp;
 				break;
 			case 'k':
 				ntemp = atoi(optarg);
