@@ -297,7 +297,8 @@ void become_daemon(void)
 	close(1);
 	close(2);
 
-	if (chdir("/")); // the 'if' is there to supress the unused-return-value-wanring
+	if (chdir("/"))
+		; // the 'if' is there to supress the unused-return-value-wanring
 #endif
 }
 
@@ -359,8 +360,10 @@ int read_data(int fd, unsigned char *buf, int len)
 {
         int  nread=0;
         int  total_read = 0;
-                                                                                                                                  
-        while (nread < len) {
+
+	if (fd<0) return -1;
+
+        while (total_read < len) {
                 nread = read(fd, buf+total_read, len-total_read);
 
                 if (nread < 0)
