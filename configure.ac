@@ -2,11 +2,11 @@
 # Process this file with autoconf to produce a configure script.
 
 #AC_PREREQ(2.59)
-AC_INIT(tgcd, 1.0.2, faraz@fzv.ca)
+AC_INIT(tgcd, 1.0.2)
 AC_CONFIG_SRCDIR([includes.h])
 #AC_CONFIG_HEADER(config.h)
 
-AM_INIT_AUTOMAKE(tgcd,1.0.2)
+AM_INIT_AUTOMAKE
 AM_CONFIG_HEADER(config.h)
 
 # Checks for programs.
