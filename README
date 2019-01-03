@@ -96,5 +96,14 @@ Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 	Please feel free to send us your comments or any patches you may have to get tgc 
 	working on other platforms.
 
+* Install:
+
+	git clone https://github.com/kirgene/tgcd
+	cd tgcd
+	autoreconf -ivf
+	./configure
+	make
+	su
+	make install
 
 
